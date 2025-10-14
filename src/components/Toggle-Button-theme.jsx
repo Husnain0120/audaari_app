@@ -17,7 +17,7 @@ export function ToggleButtonTheme() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className={'dark:bg-black'} variant='gost' size='icon'>
+        <Button className={'dark:bg-black '} variant='gost' size='icon'>
           <Sun className='h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90 dark:text-white text-black  ' />
           <Moon className='absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0' />
           <span className='sr-only'>Toggle theme</span>
