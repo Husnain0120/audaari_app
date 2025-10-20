@@ -33,7 +33,7 @@ const VerifyPage = () => {
           pattern='[0-9]*' // ✅ Restrict to digits
           maxLength={4} // ✅ Only 4 digits allowed
           placeholder='Enter 4-digit OTP'
-          className='otp-input w-full text-center rounded-md bg-gray-100 dark:bg-black border border-white/70 text-white focus:outline-none dark:focus:border-white focus:border-black text-lg py-3 mb-6 placeholder-gray-500'
+          className='otp-input w-full text-center rounded-md bg-gray-100 dark:bg-black border border-white/70 dark:text-white focus:outline-none dark:focus:border-white text-black focus:border-black text-lg py-3 mb-6 placeholder-gray-500'
           id='otp-input'
         />
 
