@@ -24,10 +24,12 @@ const Navbar = () => {
 
       <div className="flex">
         <div className="p-0.5 border-black rounded-full  mx-4 border-2 dark:border-white">
-          <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
+          <Link href={'/profile'}>
+            <Avatar>
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          </Link>
         </div>
         <ToggleButtonTheme />
       </div>

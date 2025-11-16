@@ -13,6 +13,7 @@ import {
   Mail,
   MapPin,
   Phone,
+  ShieldAlert,
   ShieldCheck,
   Target,
   UserCheck,
@@ -29,7 +30,7 @@ const userData = {
   address: 'Karachi, Pakistan',
   nationalId: '37402-1234567-1',
   isVerified: true,
-  kycVerified: false, // KYC status
+  kycVerified: true, // KYC status
   business: 'Khan Creative Studio',
   work: 'Senior Product Designer',
   bannerImage: '/professional-banner.png',
@@ -199,22 +200,27 @@ export default function ProfessionalProfilePage() {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <motion.div
-                className="absolute -bottom-2 -right-2 bg-white dark:bg-black rounded-full p-1 border-2 border-black dark:border-white shadow-lg"
-                initial={{ scale: 0, rotate: -180 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ delay: 0.5, type: 'spring' }}
-              >
-                <ShieldCheck className="w-5 h-5 text-black dark:text-white" />
-              </motion.div>
             </motion.div>
 
             {/* Profile Info */}
             <div className="flex-1 space-y-4">
               <motion.div variants={itemVariants}>
-                <h1 className="text-4xl lg:mt-20  lg:text-5xl font-light text-black dark:text-white tracking-tight">
+                <h1 className="text-4xl flex lg:mt-20  lg:text-5xl font-light text-black dark:text-white tracking-tight">
                   {userData.name}
+                  <motion.div
+                    className="ml-2 lg:mt-4   rounded-full   dark:border-white "
+                    initial={{ scale: 0, rotate: -190 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ delay: 0.5, type: 'spring' }}
+                  >
+                    {userData.kycVerified && userData.isVerified ? (
+                      <ShieldCheck className="w-7 h-7 text-black dark:text-white" />
+                    ) : (
+                      <ShieldAlert className="w-7 h-7 text-red-800  " />
+                    )}
+                  </motion.div>
                 </h1>
+
                 <div className="flex items-center gap-4 mt-2">
                   <p className="text-lg text-gray-600 dark:text-gray-400">
                     {userData.title}
