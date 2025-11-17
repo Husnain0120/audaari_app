@@ -8,15 +8,16 @@ import {
   Building,
   Calendar,
   CheckCircle2,
-  Edit3,
   FileText,
   Mail,
   MapPin,
+  Pencil,
   Phone,
   ShieldAlert,
   ShieldCheck,
   Target,
   UserCheck,
+  X,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -30,7 +31,7 @@ const userData = {
   address: 'Karachi, Pakistan',
   nationalId: '37402-1234567-1',
   isVerified: true,
-  kycVerified: true, // KYC status
+  kycVerified: false, // KYC status
   business: 'Khan Creative Studio',
   work: 'Senior Product Designer',
   bannerImage: '/professional-banner.png',
@@ -156,7 +157,7 @@ export default function ProfessionalProfilePage() {
                 onClick={() => setShowKYCAlert(false)}
                 className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200"
               >
-                ×
+                <X size={20} />
               </button>
             </div>
           </div>
@@ -173,13 +174,12 @@ export default function ProfessionalProfilePage() {
         {/* Update Profile Button */}
         <motion.button
           onClick={handleUpdateProfile}
-          className="absolute top-6 right-6 bg-white dark:bg-black text-black dark:text-white px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 flex items-center gap-2 shadow-lg hover:shadow-xl transition-all"
+          className="absolute top-6 right-6 bg-white dark:bg-black/80 dark:hover:bg-black  dark:text-white px-2 py-2 shadow-2xl cursor-pointer rounded-full border border-gray-300 dark:border-gray-700 flex hover:bg-white/90 items-center gap-2  hover:shadow-xl transition-all text-black/70 hover:text-black"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           variants={itemVariants}
         >
-          <Edit3 className="w-4 h-4" />
-          <span className="text-sm font-medium">Update Profile</span>
+          <Pencil size={17} />
         </motion.button>
       </motion.div>
 
@@ -205,10 +205,11 @@ export default function ProfessionalProfilePage() {
             {/* Profile Info */}
             <div className="flex-1 space-y-4">
               <motion.div variants={itemVariants}>
+                {' '}
                 <h1 className="text-4xl flex lg:mt-20  lg:text-5xl font-light text-black dark:text-white tracking-tight">
                   {userData.name}
                   <motion.div
-                    className="ml-2 lg:mt-4   rounded-full   dark:border-white "
+                    className="ml-2 lg:mt-4   rounded-full   mt-2 dark:border-white "
                     initial={{ scale: 0, rotate: -190 }}
                     animate={{ scale: 1, rotate: 0 }}
                     transition={{ delay: 0.5, type: 'spring' }}
@@ -220,7 +221,6 @@ export default function ProfessionalProfilePage() {
                     )}
                   </motion.div>
                 </h1>
-
                 <div className="flex items-center gap-4 mt-2">
                   <p className="text-lg text-gray-600 dark:text-gray-400">
                     {userData.title}

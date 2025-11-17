@@ -23,8 +23,9 @@ const Navbar = () => {
       </div>
 
       <div className="flex">
-        <div className="p-0.5 border-black rounded-full  mx-4 border-2 dark:border-white">
+        <div className="p-0.5 border-black rounded-full  mx-4 border-2 dark:border-white transition-transform transform hover:scale-110 duration-400">
           <Link href={'/profile'}>
+            {/* Fix applied: hover scale effect added instead of changing width/height */}
             <Avatar>
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>
