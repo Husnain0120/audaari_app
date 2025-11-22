@@ -1,54 +1,121 @@
 'use client';
 
-import { Crown } from 'lucide-react'; // 👑 Premium icon (lucide-react)
+import { Check, Lock, X } from 'lucide-react';
 import { useState } from 'react';
 
 const GetPremium = () => {
-  // ⚙️ Simulated premium status (false = not premium)
-  const [isPremium, setIsPremium] = useState(false);
+  const [plan, setPlan] = useState('free');
 
   return (
-    <div className='flex items-center justify-center mt-30 dark:bg-black text-white'>
-      <div className=' p-10 rounded-2xl shadow-[0_0_40px_rgba(255,255,255,0.05)] w-full max-w-sm text-center'>
-        {/* ✅ Icon */}
-        <div className='flex justify-center mb-4'>
-          <Crown className='w-12 h-12 text-yellow-400' />
+    <div className="min-h-screen flex items-center justify-center px-4 bg-white dark:bg-black transition-colors duration-300">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl">
+        {/* FREE CARD */}
+        <div className="rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 p-8 shadow-xl">
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-black dark:text-white">
+              Free Plan
+            </h2>
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">
+              Basic access for new users
+            </p>
+          </div>
+
+          <div className="mb-6">
+            <span className="text-4xl font-extrabold text-black dark:text-white">
+              Rs0
+            </span>
+            <span className="text-neutral-500"> / month</span>
+          </div>
+
+          <ul className="space-y-3 text-sm text-neutral-700 dark:text-neutral-300 mb-8">
+            <li className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-green-500" /> Create your profile
+            </li>
+            <li className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-green-500" /> View your contracts &
+              name
+            </li>
+            <li className="flex items-center gap-2">
+              <X className="w-4 h-4 text-red-500" /> Cannot complete KYC
+            </li>
+            <li className="flex items-center gap-2">
+              <X className="w-4 h-4 text-red-500" /> Cannot accept contracts
+            </li>
+            <li className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-green-500" /> Can deny contracts
+            </li>
+            <li className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-green-500" /> Can follow users
+            </li>
+            <li className="flex items-center gap-2">
+              <X className="w-4 h-4 text-red-500" /> No profile badge
+            </li>
+          </ul>
+
+          <button
+            onClick={() => setPlan('free')}
+            className="w-full py-3 rounded-xl bg-black text-white dark:bg-white dark:text-black font-semibold hover:opacity-90 transition"
+          >
+            Continue Free
+          </button>
         </div>
 
-        {/* ✅ Conditional Rendering */}
-        {isPremium ? (
-          <>
-            {/* ✅ Premium user content */}
-            <h1 className='text-2xl text-black dark:text-white font-bold mb-2'>
-              Welcome, Premium User!
-            </h1>
-            <p className='text-gray-400 mb-6'>
-              You have full access to this feature.
+        {/* PREMIUM CARD */}
+        <div className="relative rounded-3xl border-2 border-black dark:border-white bg-white dark:bg-gradient-to-b dark:from-neutral-900 dark:to-neutral-950 p-8 shadow-2xl">
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-black text-white dark:bg-white dark:text-black text-xs font-semibold px-4 py-1 rounded-full">
+            MOST POPULAR
+          </div>
+
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-black dark:text-white">
+              Premium Plan
+            </h2>
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">
+              For serious contract dealers
             </p>
-            <button
-              onClick={() => alert('Premium Feature Activated 🚀')}
-              className='dark:bg-white dark:text-black bg-black w-full py-3 rounded-full font-medium hover:opacity-90 transition'
-            >
-              Access Premium Feature
-            </button>
-          </>
-        ) : (
-          <>
-            {/* 🚫 Non-premium message */}
-            <h1 className='text-2xl text-black dark:text-white font-bold mb-2'>
-              Premium Only
-            </h1>
-            <p className='text-gray-400 mb-6'>
-              This feature is only available for Premium users.
-            </p>
-            <button
-              onClick={() => setIsPremium(true)} // ✅ Demo toggle to simulate upgrade
-              className='dark:bg-white dark:text-black bg-black w-full py-3 rounded-full font-medium hover:opacity-90 transition'
-            >
-              Upgrade to Premium
-            </button>
-          </>
-        )}
+          </div>
+
+          <div className="mb-6 flex items-end gap-2">
+            <span className="text-5xl font-extrabold text-black dark:text-white">
+              Rs500
+            </span>
+            <span className="text-neutral-500">/ month</span>
+          </div>
+
+          <ul className="space-y-3 text-sm text-neutral-700 dark:text-neutral-300 mb-8">
+            <li className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-green-500" /> Create & verify
+              profile
+            </li>
+            <li className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-green-500" /> View contract sender
+              details
+            </li>
+            <li className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-green-500" /> Complete KYC
+              verification
+            </li>
+            <li className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-green-500" /> Accept contracts
+            </li>
+            <li className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-green-500" /> Deny contracts
+            </li>
+            <li className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-green-500" /> Follow other users
+            </li>
+            <li className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-green-500" /> Premium profile badge
+            </li>
+          </ul>
+
+          <button
+            onClick={() => setPlan('premium')}
+            className="w-full py-4 rounded-2xl bg-black text-white dark:bg-white dark:text-black font-semibold hover:opacity-90 transition flex items-center justify-center gap-2"
+          >
+            <Lock className="w-4 h-4" /> Upgrade to Premium
+          </button>
+        </div>
       </div>
     </div>
   );

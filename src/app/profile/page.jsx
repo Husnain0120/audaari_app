@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import {
   AlertTriangle,
@@ -8,6 +9,7 @@ import {
   Building,
   Calendar,
   CheckCircle2,
+  CircleAlert,
   FileText,
   Mail,
   MapPin,
@@ -31,7 +33,7 @@ const userData = {
   address: 'Karachi, Pakistan',
   nationalId: '37402-1234567-1',
   isVerified: true,
-  kycVerified: false, // KYC status
+  kycVerified: true, // KYC status
   business: 'Khan Creative Studio',
   work: 'Senior Product Designer',
   bannerImage: '/professional-banner.png',
@@ -113,6 +115,7 @@ const pulseVariants = {
 export default function ProfessionalProfilePage() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [showKYCAlert, setShowKYCAlert] = useState(!userData.kycVerified);
+  const [folloeBtnAlert, SetFollowBtnAlert] = useState('');
 
   useEffect(() => {
     setIsLoaded(true);
@@ -130,6 +133,12 @@ export default function ProfessionalProfilePage() {
     // Add your KYC completion logic here
   };
 
+  // follow btn function
+  const followBtn = () => {
+    if (!userData.kycVerified) {
+      SetFollowBtnAlert(`Are You sure ${userData.name} are not verified  `);
+    }
+  };
   return (
     <motion.main
       className="min-h-screen bg-white dark:bg-black"
@@ -214,6 +223,7 @@ export default function ProfessionalProfilePage() {
                     animate={{ scale: 1, rotate: 0 }}
                     transition={{ delay: 0.5, type: 'spring' }}
                   >
+                    {' '}
                     {userData.kycVerified && userData.isVerified ? (
                       <ShieldCheck className="w-7 h-7 text-black dark:text-white" />
                     ) : (
@@ -231,7 +241,24 @@ export default function ProfessionalProfilePage() {
                   </p>
                 </div>
               </motion.div>
-
+              <Button
+                variant={'gost'}
+                className={` ${
+                  !userData.kycVerified
+                    ? 'bg-red-700   text-white rounded-4xl '
+                    : 'cursor-pointer px-6 hover:bg-blue-400 rounded-3xl bg-blue-300 hover:shadow-lg shadow-sm transition-all text-white font-semibold '
+                }  `}
+                onClick={followBtn}
+              >
+                Follow {folloeBtnAlert && <CircleAlert />}
+              </Button>
+              {folloeBtnAlert && (
+                <div>
+                  <dev className="text-red-800 px-4 mt-0 py-1 bg-red-100 border font-semibold sm:text-red-700 border-red-700 rounded-4xl text-[10px] sm:text-sm  ">
+                    {folloeBtnAlert}
+                  </dev>
+                </div>
+              )}
               {/* National ID & KYC Status */}
               <motion.div
                 className="flex items-center gap-4 flex-wrap"
