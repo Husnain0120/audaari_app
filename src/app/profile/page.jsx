@@ -20,11 +20,26 @@ import {
   Target,
   UserCheck,
   X,
+  Camera,
+  Image,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 // Demo user data with KYC status
-const userData = {
+const initialUserData = {
   name: 'Asya Khan',
   age: 28,
   title: 'Product Design Director',
@@ -33,11 +48,11 @@ const userData = {
   address: 'Karachi, Pakistan',
   nationalId: '37402-1234567-1',
   isVerified: true,
-  kycVerified: true, // KYC status
+  kycVerified: false,
   business: 'Khan Creative Studio',
   work: 'Senior Product Designer',
-  bannerImage: '/professional-banner.png',
-  profileImage: '/professional-profile.png',
+  bannerImage: 'professional-banner.png',
+  profileImage: 'professional-profile.png',
   bio: 'Leading digital product design teams to create meaningful experiences that drive business growth and user satisfaction.',
   joinDate: 'March 2020',
   about:
@@ -114,31 +129,67 @@ const pulseVariants = {
 
 export default function ProfessionalProfilePage() {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [showKYCAlert, setShowKYCAlert] = useState(!userData.kycVerified);
-  const [folloeBtnAlert, SetFollowBtnAlert] = useState('');
+  const [userData, setUserData] = useState(initialUserData);
+  const [showKYCAlert, setShowKYCAlert] = useState(!initialUserData.kycVerified);
+  const [followBtnAlert, setFollowBtnAlert] = useState('');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editForm, setEditForm] = useState(initialUserData);
 
   useEffect(() => {
     setIsLoaded(true);
   }, []);
 
-  const handleUpdateProfile = () => {
-    // Handle update profile action
-    console.log('Update profile clicked');
-    // Add your update profile logic here
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleStatsChange = (e) => {
+    const { name, value } = e.target;
+    setEditForm((prev) => ({
+      ...prev,
+      stats: { ...prev.stats, [name]: value },
+    }));
+  };
+
+  const handleExpertiseChange = (e) => {
+    const value = e.target.value;
+    setEditForm((prev) => ({
+      ...prev,
+      expertise: value.split(',').map((item) => item.trim()),
+    }));
+  };
+
+  const handleSaveProfile = () => {
+    setUserData(editForm);
+    setIsDialogOpen(false);
   };
 
   const handleCompleteKYC = () => {
-    // Handle KYC completion action
     console.log('Complete KYC clicked');
-    // Add your KYC completion logic here
   };
 
-  // follow btn function
-  const followBtn = () => {
-    if (!userData.kycVerified) {
-      SetFollowBtnAlert(`Are You sure ${userData.name} are not verified  `);
+  const handleImageUpload = (e, type) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (type === 'banner') {
+          setEditForm(prev => ({ ...prev, bannerImage: event.target.result }));
+        } else {
+          setEditForm(prev => ({ ...prev, profileImage: event.target.result }));
+        }
+      };
+      reader.readAsDataURL(file);
     }
   };
+
+  const followBtn = () => {
+    if (!userData.kycVerified) {
+      setFollowBtnAlert(`Are You sure? ${userData.name} is not verified`);
+    }
+  };
+
   return (
     <motion.main
       className="min-h-screen bg-white dark:bg-black"
@@ -173,61 +224,339 @@ export default function ProfessionalProfilePage() {
         </motion.div>
       )}
 
-      {/* Minimal Header */}
+      {/* Banner Image Section */}
       <motion.div
-        className="h-48 bg-black dark:bg-white relative overflow-hidden"
+        className="h-64 bg-gray-900 dark:bg-gray-800 relative overflow-hidden"
         variants={itemVariants}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-black via-gray-900 to-black dark:from-white dark:via-gray-100 dark:to-white" />
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: `url(${userData.bannerImage})`,
+          }}
+        />
 
-        {/* Update Profile Button */}
+        {/* Banner Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+
+        {/* Banner Edit Button */}
         <motion.button
-          onClick={handleUpdateProfile}
-          className="absolute top-6 right-6 bg-white dark:bg-black/80 dark:hover:bg-black  dark:text-white px-2 py-2 shadow-2xl cursor-pointer rounded-full border border-gray-300 dark:border-gray-700 flex hover:bg-white/90 items-center gap-2  hover:shadow-xl transition-all text-black/70 hover:text-black"
+          className="absolute top-6 right-20 bg-white/20 backdrop-blur-sm dark:bg-black/40 text-white p-2 rounded-full border border-white/30 hover:bg-white/30 transition-all"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          variants={itemVariants}
+          onClick={() => document.getElementById('banner-upload')?.click()}
         >
-          <Pencil size={17} />
+          <Image size={18} />
         </motion.button>
+        <Input
+          id="banner-upload"
+          type="file"
+          accept="image/*"
+          onChange={(e) => handleImageUpload(e, 'banner')}
+          className="hidden"
+        />
+
+        {/* Update Profile Button */}
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <motion.button
+              onClick={() => setEditForm(userData)}
+              className="absolute top-6 right-6 bg-white dark:bg-black/80 dark:hover:bg-black dark:text-white px-4 py-2 shadow-2xl cursor-pointer rounded-full border border-gray-300 dark:border-gray-700 flex hover:bg-white/90 items-center gap-2 hover:shadow-xl transition-all text-black/70 hover:text-black"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              variants={itemVariants}
+            >
+              <Pencil size={17} />
+              <span className="text-sm">Edit Profile</span>
+            </motion.button>
+          </DialogTrigger>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden bg-white dark:bg-black border-gray-200 dark:border-gray-800 p-0">
+            <DialogHeader className="px-6 pt-6 pb-4 border-b border-gray-200 dark:border-gray-800">
+              <DialogTitle className="text-2xl font-light text-black dark:text-white">
+                Edit Professional Profile
+              </DialogTitle>
+              <DialogDescription className="text-gray-500 dark:text-gray-400">
+                Update your professional information and images
+              </DialogDescription>
+            </DialogHeader>
+
+            <ScrollArea className="h-[60vh] px-6">
+              <div className="space-y-6 py-4">
+                {/* Image Upload Section */}
+                <div className="space-y-4">
+                  <Label className="text-black dark:text-white font-medium">Profile Images</Label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Banner Image Upload */}
+                    <div className="space-y-3">
+                      <Label className="text-sm text-gray-600 dark:text-gray-400">Banner Image</Label>
+                      <div className="relative group">
+                        <div
+                          className="h-32 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 flex items-center justify-center overflow-hidden"
+                          style={{
+                            backgroundImage: `url(${editForm.bannerImage})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center'
+                          }}
+                        >
+                          <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all flex items-center justify-center">
+                            <Camera className="w-8 h-8 text-white/70 group-hover:text-white" />
+                          </div>
+                        </div>
+                        <Input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleImageUpload(e, 'banner')}
+                          className="absolute inset-0 opacity-0 cursor-pointer"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Profile Image Upload */}
+                    <div className="space-y-3">
+                      <Label className="text-sm text-gray-600 dark:text-gray-400">Profile Image</Label>
+                      <div className="relative group flex justify-center">
+                        <div
+                          className="h-32 w-32 rounded-full border-2 border-dashed border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 flex items-center justify-center overflow-hidden"
+                          style={{
+                            backgroundImage: `url(${editForm.profileImage})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center'
+                          }}
+                        >
+                          <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all flex items-center justify-center rounded-full">
+                            <Camera className="w-6 h-6 text-white/70 group-hover:text-white" />
+                          </div>
+                        </div>
+                        <Input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleImageUpload(e, 'profile')}
+                          className="absolute inset-0 opacity-0 cursor-pointer rounded-full"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Personal Information */}
+                <div className="space-y-4">
+                  <Label className="text-black dark:text-white font-medium">Personal Information</Label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name" className="text-sm text-gray-600 dark:text-gray-400">Full Name</Label>
+                      <Input
+                        id="name"
+                        name="name"
+                        value={editForm.name}
+                        onChange={handleEditChange}
+                        className="bg-white dark:bg-gray-900 text-black dark:text-white border-gray-200 dark:border-gray-700"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="title" className="text-sm text-gray-600 dark:text-gray-400">Job Title</Label>
+                      <Input
+                        id="title"
+                        name="title"
+                        value={editForm.title}
+                        onChange={handleEditChange}
+                        className="bg-white dark:bg-gray-900 text-black dark:text-white border-gray-200 dark:border-gray-700"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="text-sm text-gray-600 dark:text-gray-400">Email</Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        value={editForm.email}
+                        onChange={handleEditChange}
+                        className="bg-white dark:bg-gray-900 text-black dark:text-white border-gray-200 dark:border-gray-700"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="phone" className="text-sm text-gray-600 dark:text-gray-400">Phone</Label>
+                      <Input
+                        id="phone"
+                        name="phone"
+                        value={editForm.phone}
+                        onChange={handleEditChange}
+                        className="bg-white dark:bg-gray-900 text-black dark:text-white border-gray-200 dark:border-gray-700"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="address" className="text-sm text-gray-600 dark:text-gray-400">Address</Label>
+                    <Input
+                      id="address"
+                      name="address"
+                      value={editForm.address}
+                      onChange={handleEditChange}
+                      className="bg-white dark:bg-gray-900 text-black dark:text-white border-gray-200 dark:border-gray-700"
+                    />
+                  </div>
+                </div>
+
+                {/* Professional Information */}
+                <div className="space-y-4">
+                  <Label className="text-black dark:text-white font-medium">Professional Information</Label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="business" className="text-sm text-gray-600 dark:text-gray-400">Business Name</Label>
+                      <Input
+                        id="business"
+                        name="business"
+                        value={editForm.business}
+                        onChange={handleEditChange}
+                        className="bg-white dark:bg-gray-900 text-black dark:text-white border-gray-200 dark:border-gray-700"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="work" className="text-sm text-gray-600 dark:text-gray-400">Current Role</Label>
+                      <Input
+                        id="work"
+                        name="work"
+                        value={editForm.work}
+                        onChange={handleEditChange}
+                        className="bg-white dark:bg-gray-900 text-black dark:text-white border-gray-200 dark:border-gray-700"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bio & About */}
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="bio" className="text-black dark:text-white font-medium">Bio</Label>
+                    <Textarea
+                      id="bio"
+                      name="bio"
+                      value={editForm.bio}
+                      onChange={handleEditChange}
+                      className="h-20 bg-white dark:bg-gray-900 text-black dark:text-white border-gray-200 dark:border-gray-700 resize-none"
+                      placeholder="Short professional bio..."
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="about" className="text-black dark:text-white font-medium">About</Label>
+                    <Textarea
+                      id="about"
+                      name="about"
+                      value={editForm.about}
+                      onChange={handleEditChange}
+                      className="h-32 bg-white dark:bg-gray-900 text-black dark:text-white border-gray-200 dark:border-gray-700 resize-none"
+                      placeholder="Detailed professional summary..."
+                    />
+                  </div>
+                </div>
+
+                {/* Professional Stats */}
+                <div className="space-y-4">
+                  <Label className="text-black dark:text-white font-medium">Professional Stats</Label>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {Object.keys(editForm.stats).map((key) => (
+                      <div key={key} className="space-y-2">
+                        <Label htmlFor={`stat-${key}`} className="text-xs capitalize text-gray-500">{key}</Label>
+                        <Input
+                          id={`stat-${key}`}
+                          name={key}
+                          value={editForm.stats[key]}
+                          onChange={handleStatsChange}
+                          className="bg-white dark:bg-gray-900 text-black dark:text-white border-gray-200 dark:border-gray-700"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Expertise */}
+                <div className="space-y-4">
+                  <Label htmlFor="expertise" className="text-black dark:text-white font-medium">Areas of Expertise</Label>
+                  <Textarea
+                    id="expertise"
+                    name="expertise"
+                    value={editForm.expertise.join(', ')}
+                    onChange={handleExpertiseChange}
+                    className="bg-white dark:bg-gray-900 text-black dark:text-white border-gray-200 dark:border-gray-700 resize-none"
+                    placeholder="Design Systems, UX Strategy, Team Leadership, Product Scaling"
+                  />
+                  <p className="text-xs text-gray-500">Separate each expertise with a comma</p>
+                </div>
+              </div>
+            </ScrollArea>
+
+            <DialogFooter className="px-6 py-4 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
+              <Button
+                variant="outline"
+                onClick={() => setIsDialogOpen(false)}
+                className="text-black dark:text-white border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleSaveProfile}
+                className="bg-black text-white dark:bg-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
+              >
+                Save Changes
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </motion.div>
 
-      <div className="px-6 lg:px-8 max-w-6xl mx-auto -mt-16">
+      <div className="px-6 lg:px-8 max-w-6xl mx-auto -mt-20">
         {/* Profile Header */}
         <motion.div className="relative mb-12" variants={cardVariants}>
           <div className="flex flex-col lg:flex-row items-start gap-8">
-            {/* Profile Image */}
+            {/* Profile Image with Edit */}
             <motion.div
-              className="relative flex-shrink-0"
+              className="relative flex-shrink-0 group"
               whileHover={{ scale: 1.02 }}
               transition={{ type: 'spring', stiffness: 300 }}
             >
               <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-full bg-white dark:bg-black border-4 border-white dark:border-black shadow-2xl overflow-hidden">
                 <img
-                  src={userData.profileImage || '/placeholder.svg'}
+                  src={userData.profileImage}
                   alt={userData.name}
                   className="w-full h-full object-cover"
                 />
               </div>
+
+              {/* Profile Image Edit Overlay */}
+              <motion.button
+                className="absolute bottom-2 right-2 bg-black/70 text-white p-2 rounded-full border border-white/30 opacity-0 group-hover:opacity-100 transition-all duration-200"
+                whileHover={{ scale: 1.1 }}
+                onClick={() => document.getElementById('profile-upload')?.click()}
+              >
+                <Camera size={16} />
+              </motion.button>
+              <Input
+                id="profile-upload"
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleImageUpload(e, 'profile')}
+                className="hidden"
+              />
             </motion.div>
 
             {/* Profile Info */}
             <div className="flex-1 space-y-4">
               <motion.div variants={itemVariants}>
-                {' '}
-                <h1 className="text-4xl flex lg:mt-20  lg:text-5xl font-light text-black dark:text-white tracking-tight">
+                <h1 className="text-4xl flex lg:mt-20 lg:text-5xl font-light text-black dark:text-white tracking-tight">
                   {userData.name}
                   <motion.div
-                    className="ml-2 lg:mt-4   rounded-full   mt-2 dark:border-white "
-                    initial={{ scale: 0, rotate: -190 }}
+                    className="ml-2 lg:mt-4 mt-2"
+                    initial={{ scale: 0, rotate: -180 }}
                     animate={{ scale: 1, rotate: 0 }}
                     transition={{ delay: 0.5, type: 'spring' }}
                   >
-                    {' '}
                     {userData.kycVerified && userData.isVerified ? (
-                      <ShieldCheck className="w-7 h-7 text-black dark:text-white" />
+                      <ShieldCheck className="w-7 h-7 text-green-600 dark:text-green-400" />
                     ) : (
-                      <ShieldAlert className="w-7 h-7 text-red-800  " />
+                      <ShieldAlert className="w-7 h-7 text-red-600" />
                     )}
                   </motion.div>
                 </h1>
@@ -241,24 +570,24 @@ export default function ProfessionalProfilePage() {
                   </p>
                 </div>
               </motion.div>
+
               <Button
-                variant={'gost'}
-                className={` ${
-                  !userData.kycVerified
-                    ? 'bg-red-700   text-white rounded-4xl '
-                    : 'cursor-pointer px-6 hover:bg-blue-400 rounded-3xl bg-blue-300 hover:shadow-lg shadow-sm transition-all text-white font-semibold '
-                }  `}
+                variant={'ghost'}
+                className={`${!userData.kycVerified
+                  ? 'bg-red-700 text-white rounded-full hover:bg-red-800'
+                  : 'cursor-pointer px-6 hover:bg-blue-600 rounded-full bg-blue-500 hover:shadow-lg shadow-sm transition-all text-white font-semibold'
+                  }`}
                 onClick={followBtn}
               >
-                Follow {folloeBtnAlert && <CircleAlert />}
+                Follow {followBtnAlert && <CircleAlert className="ml-2" />}
               </Button>
-              {folloeBtnAlert && (
-                <div>
-                  <dev className="text-red-800 px-4 mt-0 py-1 bg-red-100 border font-semibold sm:text-red-700 border-red-700 rounded-4xl text-[10px] sm:text-sm  ">
-                    {folloeBtnAlert}
-                  </dev>
+
+              {followBtnAlert && (
+                <div className="text-red-800 px-4 py-2 bg-red-100 border font-semibold border-red-300 rounded-lg text-sm">
+                  {followBtnAlert}
                 </div>
               )}
+
               {/* National ID & KYC Status */}
               <motion.div
                 className="flex items-center gap-4 flex-wrap"
@@ -273,11 +602,10 @@ export default function ProfessionalProfilePage() {
 
                 {/* KYC Status Badge */}
                 <motion.div
-                  className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${
-                    userData.kycVerified
-                      ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 border border-green-200 dark:border-green-800'
-                      : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 border border-red-200 dark:border-red-800'
-                  }`}
+                  className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${userData.kycVerified
+                    ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 border border-green-200 dark:border-green-800'
+                    : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 border border-red-200 dark:border-red-800'
+                    }`}
                   variants={userData.kycVerified ? {} : pulseVariants}
                   animate={userData.kycVerified ? {} : 'pulse'}
                 >
@@ -431,11 +759,10 @@ export default function ProfessionalProfilePage() {
 
             {/* KYC Status Card */}
             <motion.div
-              className={`border rounded-lg p-6 ${
-                userData.kycVerified
-                  ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
-                  : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
-              }`}
+              className={`border rounded-lg p-6 ${userData.kycVerified
+                ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
+                : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
+                }`}
               variants={cardVariants}
               whileHover="hover"
             >
@@ -450,11 +777,10 @@ export default function ProfessionalProfilePage() {
                 </h3>
               </div>
               <p
-                className={`text-sm ${
-                  userData.kycVerified
-                    ? 'text-green-700 dark:text-green-300'
-                    : 'text-red-700 dark:text-red-300'
-                }`}
+                className={`text-sm ${userData.kycVerified
+                  ? 'text-green-700 dark:text-green-300'
+                  : 'text-red-700 dark:text-red-300'
+                  }`}
               >
                 {userData.kycVerified
                   ? 'Your identity has been successfully verified through our KYC process.'
@@ -560,11 +886,10 @@ export default function ProfessionalProfilePage() {
 
             {/* Verification Status */}
             <motion.div
-              className={`rounded-lg p-8 border ${
-                userData.kycVerified
-                  ? 'bg-black dark:bg-white border-black dark:border-white'
-                  : 'bg-red-600 border-red-600'
-              }`}
+              className={`rounded-lg p-8 border ${userData.kycVerified
+                ? 'bg-black dark:bg-white border-black dark:border-white'
+                : 'bg-red-600 border-red-600'
+                }`}
               variants={cardVariants}
               whileHover="hover"
             >
@@ -587,11 +912,10 @@ export default function ProfessionalProfilePage() {
                 </motion.div>
                 <div>
                   <h3
-                    className={`text-xl font-semibold mb-2 ${
-                      userData.kycVerified
-                        ? 'text-white dark:text-black'
-                        : 'text-white'
-                    }`}
+                    className={`text-xl font-semibold mb-2 ${userData.kycVerified
+                      ? 'text-white dark:text-black'
+                      : 'text-white'
+                      }`}
                   >
                     {userData.kycVerified
                       ? 'Fully Verified Professional'
