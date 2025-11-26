@@ -42,7 +42,7 @@ const GetPremium = () => {
               <X className="w-4 h-4 text-red-500" /> Cannot accept contracts
             </li>
             <li className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-500" /> Can deny contracts
+              <X className="w-4 h-4 text-red-500" /> Can deny contracts
             </li>
             <li className="flex items-center gap-2">
               <Check className="w-4 h-4 text-green-500" /> Can follow users
@@ -77,7 +77,7 @@ const GetPremium = () => {
 
           <div className="mb-6 flex items-end gap-2">
             <span className="text-5xl font-extrabold text-black dark:text-white">
-              Rs500
+              Rs599
             </span>
             <span className="text-neutral-500">/ month</span>
           </div>
