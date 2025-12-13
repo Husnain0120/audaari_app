@@ -1,6 +1,19 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Textarea } from '@/components/ui/textarea';
 import { motion } from 'framer-motion';
 import {
   AlertTriangle,
@@ -8,9 +21,11 @@ import {
   Briefcase,
   Building,
   Calendar,
+  Camera,
   CheckCircle2,
   CircleAlert,
   FileText,
+  Image,
   Mail,
   MapPin,
   Pencil,
@@ -20,27 +35,12 @@ import {
   Target,
   UserCheck,
   X,
-  Camera,
-  Image,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogFooter,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { ScrollArea } from '@/components/ui/scroll-area';
 
 // Demo user data with KYC status
 const initialUserData = {
-  name: 'Asya Khan',
+  name: 'Asya Khan g',
   age: 28,
   title: 'Product Design Director',
   email: 'asya.khan@studio.com',
@@ -130,7 +130,9 @@ const pulseVariants = {
 export default function ProfessionalProfilePage() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [userData, setUserData] = useState(initialUserData);
-  const [showKYCAlert, setShowKYCAlert] = useState(!initialUserData.kycVerified);
+  const [showKYCAlert, setShowKYCAlert] = useState(
+    !initialUserData.kycVerified
+  );
   const [followBtnAlert, setFollowBtnAlert] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editForm, setEditForm] = useState(initialUserData);
@@ -139,24 +141,24 @@ export default function ProfessionalProfilePage() {
     setIsLoaded(true);
   }, []);
 
-  const handleEditChange = (e) => {
+  const handleEditChange = e => {
     const { name, value } = e.target;
-    setEditForm((prev) => ({ ...prev, [name]: value }));
+    setEditForm(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleStatsChange = (e) => {
+  const handleStatsChange = e => {
     const { name, value } = e.target;
-    setEditForm((prev) => ({
+    setEditForm(prev => ({
       ...prev,
       stats: { ...prev.stats, [name]: value },
     }));
   };
 
-  const handleExpertiseChange = (e) => {
+  const handleExpertiseChange = e => {
     const value = e.target.value;
-    setEditForm((prev) => ({
+    setEditForm(prev => ({
       ...prev,
-      expertise: value.split(',').map((item) => item.trim()),
+      expertise: value.split(',').map(item => item.trim()),
     }));
   };
 
@@ -173,7 +175,7 @@ export default function ProfessionalProfilePage() {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (event) => {
+      reader.onload = event => {
         if (type === 'banner') {
           setEditForm(prev => ({ ...prev, bannerImage: event.target.result }));
         } else {
@@ -252,7 +254,7 @@ export default function ProfessionalProfilePage() {
           id="banner-upload"
           type="file"
           accept="image/*"
-          onChange={(e) => handleImageUpload(e, 'banner')}
+          onChange={e => handleImageUpload(e, 'banner')}
           className="hidden"
         />
 
@@ -284,18 +286,22 @@ export default function ProfessionalProfilePage() {
               <div className="space-y-6 py-4">
                 {/* Image Upload Section */}
                 <div className="space-y-4">
-                  <Label className="text-black dark:text-white font-medium">Profile Images</Label>
+                  <Label className="text-black dark:text-white font-medium">
+                    Profile Images
+                  </Label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Banner Image Upload */}
                     <div className="space-y-3">
-                      <Label className="text-sm text-gray-600 dark:text-gray-400">Banner Image</Label>
+                      <Label className="text-sm text-gray-600 dark:text-gray-400">
+                        Banner Image
+                      </Label>
                       <div className="relative group">
                         <div
                           className="h-32 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 flex items-center justify-center overflow-hidden"
                           style={{
                             backgroundImage: `url(${editForm.bannerImage})`,
                             backgroundSize: 'cover',
-                            backgroundPosition: 'center'
+                            backgroundPosition: 'center',
                           }}
                         >
                           <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all flex items-center justify-center">
@@ -305,7 +311,7 @@ export default function ProfessionalProfilePage() {
                         <Input
                           type="file"
                           accept="image/*"
-                          onChange={(e) => handleImageUpload(e, 'banner')}
+                          onChange={e => handleImageUpload(e, 'banner')}
                           className="absolute inset-0 opacity-0 cursor-pointer"
                         />
                       </div>
@@ -313,14 +319,16 @@ export default function ProfessionalProfilePage() {
 
                     {/* Profile Image Upload */}
                     <div className="space-y-3">
-                      <Label className="text-sm text-gray-600 dark:text-gray-400">Profile Image</Label>
+                      <Label className="text-sm text-gray-600 dark:text-gray-400">
+                        Profile Image
+                      </Label>
                       <div className="relative group flex justify-center">
                         <div
                           className="h-32 w-32 rounded-full border-2 border-dashed border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 flex items-center justify-center overflow-hidden"
                           style={{
                             backgroundImage: `url(${editForm.profileImage})`,
                             backgroundSize: 'cover',
-                            backgroundPosition: 'center'
+                            backgroundPosition: 'center',
                           }}
                         >
                           <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all flex items-center justify-center rounded-full">
@@ -330,7 +338,7 @@ export default function ProfessionalProfilePage() {
                         <Input
                           type="file"
                           accept="image/*"
-                          onChange={(e) => handleImageUpload(e, 'profile')}
+                          onChange={e => handleImageUpload(e, 'profile')}
                           className="absolute inset-0 opacity-0 cursor-pointer rounded-full"
                         />
                       </div>
@@ -340,10 +348,17 @@ export default function ProfessionalProfilePage() {
 
                 {/* Personal Information */}
                 <div className="space-y-4">
-                  <Label className="text-black dark:text-white font-medium">Personal Information</Label>
+                  <Label className="text-black dark:text-white font-medium">
+                    Personal Information
+                  </Label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="name" className="text-sm text-gray-600 dark:text-gray-400">Full Name</Label>
+                      <Label
+                        htmlFor="name"
+                        className="text-sm text-gray-600 dark:text-gray-400"
+                      >
+                        Full Name
+                      </Label>
                       <Input
                         id="name"
                         name="name"
@@ -353,7 +368,12 @@ export default function ProfessionalProfilePage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="title" className="text-sm text-gray-600 dark:text-gray-400">Job Title</Label>
+                      <Label
+                        htmlFor="title"
+                        className="text-sm text-gray-600 dark:text-gray-400"
+                      >
+                        Job Title
+                      </Label>
                       <Input
                         id="title"
                         name="title"
@@ -366,7 +386,12 @@ export default function ProfessionalProfilePage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="email" className="text-sm text-gray-600 dark:text-gray-400">Email</Label>
+                      <Label
+                        htmlFor="email"
+                        className="text-sm text-gray-600 dark:text-gray-400"
+                      >
+                        Email
+                      </Label>
                       <Input
                         id="email"
                         name="email"
@@ -376,7 +401,12 @@ export default function ProfessionalProfilePage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="phone" className="text-sm text-gray-600 dark:text-gray-400">Phone</Label>
+                      <Label
+                        htmlFor="phone"
+                        className="text-sm text-gray-600 dark:text-gray-400"
+                      >
+                        Phone
+                      </Label>
                       <Input
                         id="phone"
                         name="phone"
@@ -388,7 +418,12 @@ export default function ProfessionalProfilePage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="address" className="text-sm text-gray-600 dark:text-gray-400">Address</Label>
+                    <Label
+                      htmlFor="address"
+                      className="text-sm text-gray-600 dark:text-gray-400"
+                    >
+                      Address
+                    </Label>
                     <Input
                       id="address"
                       name="address"
@@ -401,10 +436,17 @@ export default function ProfessionalProfilePage() {
 
                 {/* Professional Information */}
                 <div className="space-y-4">
-                  <Label className="text-black dark:text-white font-medium">Professional Information</Label>
+                  <Label className="text-black dark:text-white font-medium">
+                    Professional Information
+                  </Label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="business" className="text-sm text-gray-600 dark:text-gray-400">Business Name</Label>
+                      <Label
+                        htmlFor="business"
+                        className="text-sm text-gray-600 dark:text-gray-400"
+                      >
+                        Business Name
+                      </Label>
                       <Input
                         id="business"
                         name="business"
@@ -414,7 +456,12 @@ export default function ProfessionalProfilePage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="work" className="text-sm text-gray-600 dark:text-gray-400">Current Role</Label>
+                      <Label
+                        htmlFor="work"
+                        className="text-sm text-gray-600 dark:text-gray-400"
+                      >
+                        Current Role
+                      </Label>
                       <Input
                         id="work"
                         name="work"
@@ -429,7 +476,12 @@ export default function ProfessionalProfilePage() {
                 {/* Bio & About */}
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="bio" className="text-black dark:text-white font-medium">Bio</Label>
+                    <Label
+                      htmlFor="bio"
+                      className="text-black dark:text-white font-medium"
+                    >
+                      Bio
+                    </Label>
                     <Textarea
                       id="bio"
                       name="bio"
@@ -441,7 +493,12 @@ export default function ProfessionalProfilePage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="about" className="text-black dark:text-white font-medium">About</Label>
+                    <Label
+                      htmlFor="about"
+                      className="text-black dark:text-white font-medium"
+                    >
+                      About
+                    </Label>
                     <Textarea
                       id="about"
                       name="about"
@@ -455,11 +512,18 @@ export default function ProfessionalProfilePage() {
 
                 {/* Professional Stats */}
                 <div className="space-y-4">
-                  <Label className="text-black dark:text-white font-medium">Professional Stats</Label>
+                  <Label className="text-black dark:text-white font-medium">
+                    Professional Stats
+                  </Label>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {Object.keys(editForm.stats).map((key) => (
+                    {Object.keys(editForm.stats).map(key => (
                       <div key={key} className="space-y-2">
-                        <Label htmlFor={`stat-${key}`} className="text-xs capitalize text-gray-500">{key}</Label>
+                        <Label
+                          htmlFor={`stat-${key}`}
+                          className="text-xs capitalize text-gray-500"
+                        >
+                          {key}
+                        </Label>
                         <Input
                           id={`stat-${key}`}
                           name={key}
@@ -474,7 +538,12 @@ export default function ProfessionalProfilePage() {
 
                 {/* Expertise */}
                 <div className="space-y-4">
-                  <Label htmlFor="expertise" className="text-black dark:text-white font-medium">Areas of Expertise</Label>
+                  <Label
+                    htmlFor="expertise"
+                    className="text-black dark:text-white font-medium"
+                  >
+                    Areas of Expertise
+                  </Label>
                   <Textarea
                     id="expertise"
                     name="expertise"
@@ -483,7 +552,9 @@ export default function ProfessionalProfilePage() {
                     className="bg-white dark:bg-gray-900 text-black dark:text-white border-gray-200 dark:border-gray-700 resize-none"
                     placeholder="Design Systems, UX Strategy, Team Leadership, Product Scaling"
                   />
-                  <p className="text-xs text-gray-500">Separate each expertise with a comma</p>
+                  <p className="text-xs text-gray-500">
+                    Separate each expertise with a comma
+                  </p>
                 </div>
               </div>
             </ScrollArea>
@@ -529,7 +600,9 @@ export default function ProfessionalProfilePage() {
               <motion.button
                 className="absolute bottom-2 right-2 bg-black/70 text-white p-2 rounded-full border border-white/30 opacity-0 group-hover:opacity-100 transition-all duration-200"
                 whileHover={{ scale: 1.1 }}
-                onClick={() => document.getElementById('profile-upload')?.click()}
+                onClick={() =>
+                  document.getElementById('profile-upload')?.click()
+                }
               >
                 <Camera size={16} />
               </motion.button>
@@ -537,7 +610,7 @@ export default function ProfessionalProfilePage() {
                 id="profile-upload"
                 type="file"
                 accept="image/*"
-                onChange={(e) => handleImageUpload(e, 'profile')}
+                onChange={e => handleImageUpload(e, 'profile')}
                 className="hidden"
               />
             </motion.div>
@@ -573,10 +646,11 @@ export default function ProfessionalProfilePage() {
 
               <Button
                 variant={'ghost'}
-                className={`${!userData.kycVerified
-                  ? 'bg-red-700 text-white rounded-full hover:bg-red-800'
-                  : 'cursor-pointer px-6 hover:bg-blue-600 rounded-full bg-blue-500 hover:shadow-lg shadow-sm transition-all text-white font-semibold'
-                  }`}
+                className={`${
+                  !userData.kycVerified
+                    ? 'bg-red-700 text-white rounded-full hover:bg-red-800'
+                    : 'cursor-pointer px-6 hover:bg-blue-600 rounded-full bg-blue-500 hover:shadow-lg shadow-sm transition-all text-white font-semibold'
+                }`}
                 onClick={followBtn}
               >
                 Follow {followBtnAlert && <CircleAlert className="ml-2" />}
@@ -602,10 +676,11 @@ export default function ProfessionalProfilePage() {
 
                 {/* KYC Status Badge */}
                 <motion.div
-                  className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${userData.kycVerified
-                    ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 border border-green-200 dark:border-green-800'
-                    : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 border border-red-200 dark:border-red-800'
-                    }`}
+                  className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${
+                    userData.kycVerified
+                      ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 border border-green-200 dark:border-green-800'
+                      : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 border border-red-200 dark:border-red-800'
+                  }`}
                   variants={userData.kycVerified ? {} : pulseVariants}
                   animate={userData.kycVerified ? {} : 'pulse'}
                 >
@@ -759,10 +834,11 @@ export default function ProfessionalProfilePage() {
 
             {/* KYC Status Card */}
             <motion.div
-              className={`border rounded-lg p-6 ${userData.kycVerified
-                ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
-                : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
-                }`}
+              className={`border rounded-lg p-6 ${
+                userData.kycVerified
+                  ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
+                  : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
+              }`}
               variants={cardVariants}
               whileHover="hover"
             >
@@ -777,10 +853,11 @@ export default function ProfessionalProfilePage() {
                 </h3>
               </div>
               <p
-                className={`text-sm ${userData.kycVerified
-                  ? 'text-green-700 dark:text-green-300'
-                  : 'text-red-700 dark:text-red-300'
-                  }`}
+                className={`text-sm ${
+                  userData.kycVerified
+                    ? 'text-green-700 dark:text-green-300'
+                    : 'text-red-700 dark:text-red-300'
+                }`}
               >
                 {userData.kycVerified
                   ? 'Your identity has been successfully verified through our KYC process.'
@@ -886,10 +963,11 @@ export default function ProfessionalProfilePage() {
 
             {/* Verification Status */}
             <motion.div
-              className={`rounded-lg p-8 border ${userData.kycVerified
-                ? 'bg-black dark:bg-white border-black dark:border-white'
-                : 'bg-red-600 border-red-600'
-                }`}
+              className={`rounded-lg p-8 border ${
+                userData.kycVerified
+                  ? 'bg-black dark:bg-white border-black dark:border-white'
+                  : 'bg-red-600 border-red-600'
+              }`}
               variants={cardVariants}
               whileHover="hover"
             >
@@ -912,10 +990,11 @@ export default function ProfessionalProfilePage() {
                 </motion.div>
                 <div>
                   <h3
-                    className={`text-xl font-semibold mb-2 ${userData.kycVerified
-                      ? 'text-white dark:text-black'
-                      : 'text-white'
-                      }`}
+                    className={`text-xl font-semibold mb-2 ${
+                      userData.kycVerified
+                        ? 'text-white dark:text-black'
+                        : 'text-white'
+                    }`}
                   >
                     {userData.kycVerified
                       ? 'Fully Verified Professional'
