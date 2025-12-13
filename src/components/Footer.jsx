@@ -56,6 +56,7 @@ export default function Footer() {
       { label: 'Licences', href: '#' },
       { label: 'Company Information', href: '#' },
     ],
+    logout: [{ label: 'Logout', href: '#' }],
   };
 
   return (
