@@ -25,7 +25,6 @@ import {
   CheckCircle2,
   CircleAlert,
   FileText,
-  Image,
   Mail,
   MapPin,
   Pencil,
@@ -205,7 +204,7 @@ export default function ProfessionalProfilePage() {
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -50 }}
-          className="bg-red-50 dark:bg-red-900/20 border-b border-red-200 dark:border-red-800"
+          className="bg-red-50 dark:bg-red-900/20 border-b  border-red-200 dark:border-red-800"
         >
           <div className="max-w-6xl mx-auto px-6 lg:px-8 py-3">
             <div className="flex items-center justify-between">
@@ -228,7 +227,7 @@ export default function ProfessionalProfilePage() {
 
       {/* Banner Image Section */}
       <motion.div
-        className="h-64 bg-gray-900 dark:bg-gray-800 relative overflow-hidden"
+        className="h-64 bg-white dark:bg-black    relative overflow-hidden"
         variants={itemVariants}
       >
         <div
@@ -242,14 +241,7 @@ export default function ProfessionalProfilePage() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
 
         {/* Banner Edit Button */}
-        <motion.button
-          className="absolute top-6 right-20 bg-white/20 backdrop-blur-sm dark:bg-black/40 text-white p-2 rounded-full border border-white/30 hover:bg-white/30 transition-all"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => document.getElementById('banner-upload')?.click()}
-        >
-          <Image size={18} />
-        </motion.button>
+
         <Input
           id="banner-upload"
           type="file"
