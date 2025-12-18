@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { HandCoins } from 'lucide-react';
 import Link from 'next/link';
 import { ToggleButtonTheme } from './Toggle-Button-theme';
+import { Button } from './ui/button';
 
 const Navbar = () => {
   return (
@@ -33,6 +34,13 @@ const Navbar = () => {
         </div>
 
         <ToggleButtonTheme />
+        <Link href={'/login'}>
+          <Button
+            className={'bg-gray-900 text-white border dark:border-white '}
+          >
+            Login
+          </Button>
+        </Link>
       </div>
     </nav>
   );
