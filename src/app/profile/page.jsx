@@ -25,6 +25,7 @@ import {
   CheckCircle2,
   CircleAlert,
   FileText,
+  Image,
   Mail,
   MapPin,
   Pencil,
@@ -53,7 +54,7 @@ const initialUserData = {
   bannerImage: 'professional-banner.png',
   profileImage: 'professional-profile.png',
   bio: 'Leading digital product design teams to create meaningful experiences that drive business growth and user satisfaction.',
-  joinDate: 'March 2020',
+  joinDate: 'March 2021',
   about:
     'Strategic design leader with 6+ years of experience building and scaling design systems, mentoring cross-functional teams, and delivering exceptional product experiences for global clients across fintech, healthcare, and enterprise SaaS.',
   stats: {
